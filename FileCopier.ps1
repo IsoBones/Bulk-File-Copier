@@ -24,7 +24,7 @@ $yPos = 20
 $lblExtension = New-Object System.Windows.Forms.Label
 $lblExtension.Location = New-Object System.Drawing.Point(20, $yPos)
 $lblExtension.Size = New-Object System.Drawing.Size(560, 20)
-$lblExtension.Text = 'File Extension (e.g., .p3d, .txt, .png):'
+$lblExtension.Text = 'File Extension (e.g., .mp3, .txt, .png):'
 $lblExtension.Font = $titleFont
 $form.Controls.Add($lblExtension)
 
@@ -33,7 +33,7 @@ $yPos += 25
 $txtExtension = New-Object System.Windows.Forms.TextBox
 $txtExtension.Location = New-Object System.Drawing.Point(20, $yPos)
 $txtExtension.Size = New-Object System.Drawing.Size(560, 25)
-$txtExtension.Text = '.p3d'
+$txtExtension.Text = '.txt'
 $txtExtension.Font = $labelFont
 $form.Controls.Add($txtExtension)
 
@@ -93,7 +93,7 @@ $yPos += 40
 $lblPrefix = New-Object System.Windows.Forms.Label
 $lblPrefix.Location = New-Object System.Drawing.Point(20, $yPos)
 $lblPrefix.Size = New-Object System.Drawing.Size(560, 20)
-$lblPrefix.Text = 'Folder Prefix Filter (optional - e.g., ADF_):'
+$lblPrefix.Text = 'Folder Prefix Filter (optional - i.e. project_):'
 $lblPrefix.Font = $titleFont
 $form.Controls.Add($lblPrefix)
 
@@ -205,7 +205,7 @@ $btnCopy.Add_Click({
     
     if ([string]::IsNullOrWhiteSpace($extension)) {
         Write-Log "ERROR: Please enter a file extension"
-        [System.Windows.Forms.MessageBox]::Show("Please enter a file extension (e.g., .p3d)", "Error", 'OK', 'Error')
+        [System.Windows.Forms.MessageBox]::Show("Please enter a file extension (e.g., .txt)", "Error", 'OK', 'Error')
         return
     }
     
