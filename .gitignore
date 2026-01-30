@@ -1,0 +1,31 @@
+# Build outputs
+*.exe
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin
+$RECYCLE.BIN/
+
+# Windows shortcuts
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.tmp
+*.temp
+~*
+
+# Logs
+*.log
+
+# Testing
+test/
+temp/
