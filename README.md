@@ -131,7 +131,7 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## Author
 
-Created by Mudgey
+Created by IsoBones
 
 ## Acknowledgments
 
