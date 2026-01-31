@@ -8,7 +8,7 @@ Add-Type -AssemblyName System.Drawing
 # Create the main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'File Copier'
-$form.Size = New-Object System.Drawing.Size(600, 550)
+$form.Size = New-Object System.Drawing.Size(600, 585)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
