@@ -1,7 +1,6 @@
 # File Copier - A simple GUI utility for copying files with filters
-# Author: Mudgey & Contributors
+# Author: IsoBones & Contributors
 # License: MIT
-# GitHub: [Your repo URL here]
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -126,6 +125,17 @@ $txtExclude.Text = ''
 $form.Controls.Add($txtExclude)
 
 $yPos += 40
+
+# ============ Preserve Folder Structure Checkbox ============
+$chkPreserveStructure = New-Object System.Windows.Forms.CheckBox
+$chkPreserveStructure.Location = New-Object System.Drawing.Point(20, $yPos)
+$chkPreserveStructure.Size = New-Object System.Drawing.Size(560, 25)
+$chkPreserveStructure.Text = 'Preserve folder structure (recreate subfolders in destination)'
+$chkPreserveStructure.Font = $labelFont
+$chkPreserveStructure.Checked = $false
+$form.Controls.Add($chkPreserveStructure)
+
+$yPos += 35
 
 # ============ Copy Button ============
 $btnCopy = New-Object System.Windows.Forms.Button
@@ -315,14 +325,42 @@ $btnCopy.Add_Click({
             Write-Log "Found $($allFiles.Count) file(s) to copy"
             Write-Log ""
             
+            $preserveStructure = $chkPreserveStructure.Checked
+            if ($preserveStructure) {
+                Write-Log "Preserving folder structure"
+                Write-Log ""
+            }
+            
             $copiedCount = 0
             $errorCount = 0
             
             foreach ($file in $allFiles) {
                 try {
-                    Copy-Item -Path $file.FullName -Destination $destFolder -Force
-                    $copiedCount++
-                    Write-Log "[$copiedCount/$($allFiles.Count)] Copied: $($file.Name)"
+                    if ($preserveStructure) {
+                        # Calculate relative path from source folder
+                        $relativePath = $file.FullName.Substring($sourceFolder.Length).TrimStart('\')
+                        $relativeDir = Split-Path -Path $relativePath -Parent
+                        
+                        # Create destination subfolder if needed
+                        if (-not [string]::IsNullOrWhiteSpace($relativeDir)) {
+                            $destSubFolder = Join-Path -Path $destFolder -ChildPath $relativeDir
+                            if (-not (Test-Path -Path $destSubFolder)) {
+                                New-Item -ItemType Directory -Path $destSubFolder -Force | Out-Null
+                            }
+                            $finalDest = Join-Path -Path $destSubFolder -ChildPath $file.Name
+                        } else {
+                            $finalDest = Join-Path -Path $destFolder -ChildPath $file.Name
+                        }
+                        
+                        Copy-Item -Path $file.FullName -Destination $finalDest -Force
+                        $copiedCount++
+                        Write-Log "[$copiedCount/$($allFiles.Count)] Copied: $relativePath"
+                    } else {
+                        # Flat copy - all files go directly to destination
+                        Copy-Item -Path $file.FullName -Destination $destFolder -Force
+                        $copiedCount++
+                        Write-Log "[$copiedCount/$($allFiles.Count)] Copied: $($file.Name)"
+                    }
                 } catch {
                     $errorCount++
                     Write-Log "ERROR copying $($file.Name): $_"
